@@ -1,0 +1,52 @@
+http에서 인증 방식들
+
+1. Basic Authentication
+- 사용자 이름 / 비밀번호를 Base64로 인코딩해서 Authorization 헤더에 포함하여 전송
+- 안전하지 않음, SSL/TLS와 함께 사용됨
+
+이런식으로 헤더에 실림↓
+Authorization: Basic ~~~~
+
+2. Bearer Token Authentication
+- Authorization  헤더에 토큰을 포함하여 전송 
+- JWT 사용해서 인증
+- 간단함, stateless, 확장성↑
+- 토큰 노출 위험, 토큰 관리가 힘듬(귀찮)
+
+이런식으로 헤더에 실림↓
+
+Authorization: Bearer ~~~~
+
+3. OAuth
+- 토큰기반 인증방식
+- 사용자가 직접 자격 증명 x, 미리 인증받아서 토큰을 발급받고
+- 이 토큰을 이용해서 API를 요청하는 방식 OAuth 2.0
+
+kakao / Naver / git / Face book 등 
+
+4. API Key
+- 키 발급받고 api 사용
+21541
+5. Session based Authentication
+- http의 stateless 특징 때문에 session id를 생성, 프론트에 전달
+- 프론트는 session id 를 헤더나 쿠키에 포함시켜 인증
+
+이번 프로젝트에서는 Bearer Token Authentication 방식을 사용 !
+
+JWT (JSON Web Token) : 클레임이라는 정보를 JSON 형태로 안전하게 전송하기 위한 토큰
+- 인증과 정보 교환에 사용, 서명이 되어 있어서 신뢰성 확보 가능
+
+JWT의 구성요소
+1. Header : 토큰의 타입과 사용된 알고리즘 정보를 담고 있다. Base64Url로 인코딩
+2. Payload : 클레임 정보, 대상, 발행자, 만료 시간 등 다양한 정보가 포함. Base64Url로 인코딩
+3. Signature : Header 와 Payload, Secret Key 를 사용하여 생성된 서명
+
+장점 
+- 상태유지할 필요 x(stateless)
+- 간단하고 자기 포함적(필요한 모든정보를 다 가지고있음)
+- 확장성(토큰 하나로 다른 서버에서도 사용가능 (동일 시큐리티 사용할떄))
+
+단점
+- 크기 : 클레임이 많을 수록 토큰의 크기가 커짐
+- 보안 : 서명은 되어있지만 암호화는 x , 중요한 정보를 JWT에 포함하면 안됨
+- 토큰 관리 : 만료시간, 갱신의 필요성
