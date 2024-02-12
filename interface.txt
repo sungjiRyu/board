@@ -35,7 +35,7 @@ Http Status - 401 (Unauthorized)
 - 데이터베이스 에러
 Http Status - 500 (Internal Server Error)
 {
-    code : "DE",
+    code : "DBE",
     message : "Database Error."
 }
 
