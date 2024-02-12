@@ -2,6 +2,12 @@ package com.sjryu.boardback.filter;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,15 +21,51 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Component
-// 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+        
     private final JwtProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        
+        try {
+             // request 에서 token 꺼내옴
+        String token = parseBearerTokken(request);
+
+        // 검증
+        if (token == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // token 에서 email(사용자 아이디)을 꺼내옴
+        String email = jwtProvider.validate(token);
+        
+        // 검증
+        if (email == null){
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // user 정보가 담긴 객체
+        AbstractAuthenticationToken authenticationToken = 
+            new UsernamePasswordAuthenticationToken(email, null, AuthorityUtils.NO_AUTHORITIES);
+            // 인증요청에 대한 세부정보 설정
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        
+        // 토큰 정보를 context에 저장
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authenticationToken);
+
+        SecurityContextHolder.setContext(securityContext);
+            
+        }  catch (Exception exception){
+            exception.printStackTrace();
+        }
+
+        filterChain.doFilter(request, response);
         
     }
 
