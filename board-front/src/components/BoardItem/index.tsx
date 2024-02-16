@@ -30,7 +30,7 @@ export default function BoardItem({ boardListItem }: Props) {
         <div className='board-list-item-main-box'>
             <div className='board-list-item-top'>
                 <div className='board-list-item-profile-box'>
-                    <div className='board-list-item-profile-image' style={{backgroundImage: `url(${writerProfileImage ? writerProfileImage : defaultProfileImage})`}}></div>
+                    <div className='board-list-item-profile-image' style={{backgroundImage: `url(${writerProfileImage != null ? writerProfileImage : defaultProfileImage})`}}></div>
                 </div>
                 <div className='board-list-item-write-box'>
                     <div className='board-list-item-nickname'>{writerNickname}</div>
@@ -43,7 +43,7 @@ export default function BoardItem({ boardListItem }: Props) {
             </div>
             <div className='board-list-item-bottom'>
                 <div className='board-list-item-counts'>
-                    {`댓글 ${commentCount} • 좋아요 ${favoriteCount} • 조회수 ${viewCount}`}
+                    {`댓글 ${commentCount} · 좋아요 ${favoriteCount} · 조회수 ${viewCount}`}
                 </div>
             </div>
             {boardTitleImage !== null &&(
