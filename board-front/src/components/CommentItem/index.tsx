@@ -16,7 +16,7 @@ export default function index({ commentListItem }: Props) {
     <div className='comment-list-item'>
         <div className='comment-list-item-top'>
             <div className='comment-list-item-profile-box'></div>
-                <div className='comment-list-item-profile-image' style={{backgroundImage: `url(${profileImage != null ? profileImage : defultProfileImage})`}}></div>
+                <div className='comment-list-item-profile-image' style={{backgroundImage: `url(${profileImage !== null ? profileImage : defultProfileImage})`}}></div>
             <div className='comment-list-item-nickname'>{nickname}</div>
             <div className='comment-list-item-divider'>{'|'}</div>
             <div className='comment-list-item-time'>{writeDatetime+'분전'}</div>
