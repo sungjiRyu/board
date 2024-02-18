@@ -7,9 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
+import com.sjryu.boardback.dto.reponse.auth.SignInResponseDto;
 import com.sjryu.boardback.dto.reponse.auth.SignUpResponseDto;
+import com.sjryu.boardback.dto.request.auth.SignInRequestDto;
 import com.sjryu.boardback.dto.request.auth.SignUpRequestDto;
 import com.sjryu.boardback.entity.UserEntity;
+import com.sjryu.boardback.provider.JwtProvider;
 import com.sjryu.boardback.repository.UserRepository;
 import com.sjryu.boardback.service.AuthService;
 
@@ -19,9 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService{
 
-    // final로 지정해서 RequiredArgsConstructor 사용해서 생성자 만들어줌
-    // 만들어진 생성자로 의존성 주입
     private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -59,6 +61,38 @@ public class AuthServiceImplement implements AuthService{
         }
 
         return SignUpResponseDto.succes();
+    }
+
+    @Override
+    public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+     
+        String token = null;
+
+        try {
+
+            String email = dto.getEmail();
+            // email에 해당하는 user정보를 userEntity에 저장
+            UserEntity userEntity = userRepository.findByUserEmail(email);
+            // 이메일이 없다면
+            if (userEntity == null) return SignInResponseDto.signInFailed();
+            
+            // 이메일이 존재한다면
+            String password = dto.getPassword();
+            String encodePassword = userEntity.getUserPwd();
+            // 비밀번호 검증
+            boolean isMatch = passwordEncoder.matches(password, encodePassword);
+            // 비밀번호가 일치하지 않다면
+            if (!isMatch) return SignInResponseDto.signInFailed();
+            // 토큰 발행
+            token = jwtProvider.create(email);
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return SignInResponseDto.succes(token);
+
     }
     
 }
