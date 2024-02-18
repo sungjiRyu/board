@@ -1,8 +1,8 @@
-#Header {
+#header {
     padding: 20px 0;
 
     display: flex;
-    justify-items: center;
+    justify-content: center;
 }
 
 .header-container {
