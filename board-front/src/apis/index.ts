@@ -3,7 +3,7 @@ import { SignInRequestDto, SignUpRequestDto } from "./request/auth";
 import { SignInResponseDto } from "./response/auth";
 import { ResponseDto } from "./response";
 
-const DOMAIN = 'http://localhost:4000';
+const DOMAIN = 'http://localhost:4001';
 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
