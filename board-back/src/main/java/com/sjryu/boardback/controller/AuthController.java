@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sjryu.boardback.dto.request.auth.SignUpRequestDto;
 import com.sjryu.boardback.dto.reponse.auth.SignUpResponseDto;
 import com.sjryu.boardback.dto.request.auth.SignInRequestDto;
-import com.sjryu.boardback.dto.request.auth.SignUpEmailCheckDto;
 import com.sjryu.boardback.dto.reponse.auth.SignInResponseDto;
 
 import com.sjryu.boardback.service.AuthService;
@@ -43,13 +42,5 @@ public class AuthController {
         return response;
     }
 
-    @GetMapping("/sign-up/checkemail")
-    public ResponseEntity<? super SignUpResponseDto> checkEmail(
-        @RequestBody @Valid SignUpEmailCheckDto requestBody
-    ) {
-        ResponseEntity<? super SignUpResponseDto> response = authService.checkEmail(requestBody);
-        return response;
-    }
-    
     
 }
