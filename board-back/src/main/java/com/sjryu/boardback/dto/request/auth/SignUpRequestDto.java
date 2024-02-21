@@ -36,3 +36,4 @@ public class SignUpRequestDto {
     private Boolean agreedPersonal;
     
 }
+

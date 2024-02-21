@@ -1,3 +1,27 @@
+.black-large-full-button {
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 46px;
+
+    background-color: rgba(0, 0, 0, 1);
+
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 140%;
+
+    cursor: pointer;
+}
+
+.black-large-full-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 .black-button {
     border-radius: 46px;
     width: 95px;
@@ -130,4 +154,16 @@
 
 .search-light-icon {
     background-image: url(assets/image/search-light.png);
+}
+
+.check-ring-light-icon{
+    background-image: url(assets/image/check-ring-light.png);
+}
+
+.check-round-fill-icon {
+    background-image: url(assets/image/check-round-fill.png);
+}
+
+.expand-right-light-icon {
+    background-image: url(assets/image/expand-right-light.png);
 }

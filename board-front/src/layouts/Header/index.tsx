@@ -122,26 +122,27 @@ export default function Header() {
     //  event handler: 로그아웃 버튼 클릭 이벤트 처리 함수  //
     const onSignOutButtonClickHandler = () => {
       resetLoginUser();
+      setCookie('accessToken', '', {path: MAIN_PATH(), expires: new Date()})
       navigate(MAIN_PATH());
     };
 
     //  event handler: 로그인 버튼 클릭 이벤트 처리 함수  //
     const onSignInButtonClickHandler = () => {
       navigate(AUTH_PATH());
+      
     };
 
-    if(isLogin && userEmail === loginUser?.email)
-    //  render: 마이페이지 버튼 컴포넌트 렌더링  //
-    return <div className='white-button' onClick={onMyPageButtonClickHandler}>{'마이페이지'}</div>;
-    
-    if(!isLogin)
-    //  render: 로그인 버튼 컴포넌트 렌더링  //
-    return <div className='black-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>;
 
     //  render: 로그아웃 버튼 컴포넌트 렌더링  //
+    if(isLogin && userEmail === loginUser?.email)
     return <div className='white-button' onClick={onSignOutButtonClickHandler}>{'로그아웃'}</div>;
+
+    //  render: 마이페이지 버튼 컴포넌트 렌더링  //
+    if(isLogin)
+    return <div className='white-button' onClick={onMyPageButtonClickHandler}>{'마이페이지'}</div>;
     
-    
+    //  render: 로그인 버튼 컴포넌트 렌더링  //
+    return <div className='black-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>;
   };
 
   //  component: 업로드 버튼 컴포넌트  //
@@ -163,6 +164,10 @@ export default function Header() {
     return <div className='disable-button'>{'업로드'}</div>;
   };
 
+  //  effect: login user가 변경될 때 마다 실행될 함수  //
+  useEffect (() => {
+    setLogin(loginUser !== null);
+  },[loginUser]);
 
   //  render: 헤더 레이아웃 렌더링    //
   return (
