@@ -10,6 +10,7 @@ import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.auth.SignInResponseDto;
 import com.sjryu.boardback.dto.reponse.auth.SignUpResponseDto;
 import com.sjryu.boardback.dto.request.auth.SignInRequestDto;
+import com.sjryu.boardback.dto.request.auth.SignUpEmailCheckDto;
 import com.sjryu.boardback.dto.request.auth.SignUpRequestDto;
 import com.sjryu.boardback.entity.UserEntity;
 import com.sjryu.boardback.provider.JwtProvider;
@@ -93,6 +94,23 @@ public class AuthServiceImplement implements AuthService{
 
         return SignInResponseDto.succes(token);
 
+    }
+
+
+    // 이메일 중복 검사
+    public ResponseEntity<? super SignUpResponseDto> checkEmail(SignUpEmailCheckDto dto) {
+        try {
+            // 전화번호 중복검사
+            String email = dto.getEmail();
+            boolean existedEmail = userRepository.existsByUserEmail(email);
+            if (existedEmail)       return SignUpResponseDto.duplicateEmail();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return SignUpResponseDto.succes();
     }
     
 }

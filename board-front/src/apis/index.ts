@@ -1,7 +1,8 @@
 import axios from "axios";
 import { SignInRequestDto, SignUpRequestDto } from "./request/auth";
-import { SignInResponseDto } from "./response/auth";
+import { SignInResponseDto, SignUpResponseDto } from "./response/auth";
 import { ResponseDto } from "./response";
+
 
 const DOMAIN = 'http://localhost:4001';
 
@@ -10,6 +11,7 @@ const API_DOMAIN = `${DOMAIN}/api/v1`;
 // api 요청 url
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`; 
+const CHECK_EMAIL_URL = () => `${API_DOMAIN}/sign-up/checkemail`; 
 
 // async 동기처리
 export const signInRequest = async (requestBody: SignInRequestDto) => {
@@ -28,5 +30,15 @@ export const signInRequest = async (requestBody: SignInRequestDto) => {
 }
 
 export const signUpRequest = async (requestBody: SignUpRequestDto) => {
-
+    const result = await axios.post(SIGN_UP_URL(), requestBody)
+        .then(response => {
+            const responseBody: SignUpResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if(!error.response.data) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
 }
