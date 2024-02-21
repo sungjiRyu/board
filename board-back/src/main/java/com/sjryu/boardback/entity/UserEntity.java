@@ -29,17 +29,11 @@ public class UserEntity {
     public UserEntity (SignUpRequestDto dto){
 
         this.userEmail = dto.getEmail();
-    
         this.userPwd = dto.getPassword();
-        
         this.userNickname = dto.getNickname();
-        
         this.userTelNum = dto.getTelNumber();
-        
         this.userAddress = dto.getAddress();
-        
         this.userAddressDetail = dto.getAddressDetail();
-
         this.agreedPersonal = dto.getAgreedPersonal();
     }
     

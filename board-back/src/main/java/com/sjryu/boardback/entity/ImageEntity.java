@@ -22,4 +22,9 @@ public class ImageEntity {
     private int imgBoardSeq;
     private String imgUrl;
     
+
+    public ImageEntity (int boardSeq, String image){
+        this.imgBoardSeq = boardSeq;
+        this.imgUrl = image;
+    }
 }
