@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 
@@ -50,6 +49,10 @@ public class BoardEntity {
     this.boardViewCnt = 0;
     this.boardCommentCnt = 0;
         
+    }
+
+    public void increaseViewCount() {
+        this.boardViewCnt++;
     }
 
 }

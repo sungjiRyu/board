@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 import com.sjryu.boardback.entity.BoardEntity;
@@ -11,6 +12,7 @@ import com.sjryu.boardback.entity.ImageEntity;
 import com.sjryu.boardback.repository.BoardRepository;
 import com.sjryu.boardback.repository.ImageRepository;
 import com.sjryu.boardback.repository.UserRepository;
+import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
 import com.sjryu.boardback.service.BoardService;
 
 import java.util.ArrayList;
@@ -27,8 +29,36 @@ public class BoardServiceImplement implements BoardService{
     private final BoardRepository boardRepository;
 
     @Override
+    public ResponseEntity<? super GetBoardResponseDto> getBoard(Integer boardNumber) {
+
+        GetBoardResultSet resultSet = null;
+        List<ImageEntity> imageEntities = new ArrayList<>();
+
+        try {
+
+            resultSet = boardRepository.getBoard(boardNumber);
+            if(resultSet == null) return GetBoardResponseDto.noExistBoard();
+
+            imageEntities = imageRepository.findByImgBoardSeq(boardNumber);
+
+            BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
+            boardEntity.increaseViewCount();
+            boardRepository.save(boardEntity);
+            
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return GetBoardResponseDto.success(resultSet, imageEntities);
+
+    }
+
+    @Override
     public ResponseEntity<? super PostBoardResponseDto> postBoard(PostBoardRequestDto dto, String email) {
         
+        
+
         try {
             
             boolean existedEmail = userRepository.existsByUserEmail(email);
@@ -55,5 +85,7 @@ public class BoardServiceImplement implements BoardService{
         }
         return PostBoardResponseDto.success();
     }
+
+    
     
 }
