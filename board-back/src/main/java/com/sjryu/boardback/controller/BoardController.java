@@ -14,6 +14,7 @@ import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 
 import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -33,6 +34,14 @@ public class BoardController {
         @PathVariable("boardNumber") Integer boardNumber
     ){
         ResponseEntity<? super GetBoardResponseDto> response = boardService.getBoard(boardNumber);
+        return response;
+    }
+
+    @GetMapping("/{boardNumber}/favorite-list")
+    public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(
+        @PathVariable("boardNumber") Integer boardNumber
+    ){
+        ResponseEntity<? super GetFavoriteListResponseDto> response = boardService.getFavoriteList(boardNumber);
         return response;
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
@@ -16,6 +17,7 @@ import com.sjryu.boardback.repository.FavoriteRepository;
 import com.sjryu.boardback.repository.ImageRepository;
 import com.sjryu.boardback.repository.UserRepository;
 import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
+import com.sjryu.boardback.repository.resultSet.GetFavoriteListResultSet;
 import com.sjryu.boardback.service.BoardService;
 
 import java.util.ArrayList;
@@ -57,6 +59,25 @@ public class BoardServiceImplement implements BoardService{
 
         return GetBoardResponseDto.success(resultSet, imageEntities);
 
+    }
+
+    //  좋아요 누른 사람 리스트 
+    @Override
+    public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer boardNumber) {
+
+        List<GetFavoriteListResultSet> resultSets = new ArrayList<>();
+
+        try {
+
+            boolean existedBoard = boardRepository.existsByBoardSeq(boardNumber);
+            if(!existedBoard) return GetFavoriteListResponseDto.noExistBoard();
+        
+            resultSets = favoriteRepository.getFavoriteList(boardNumber);
+
+        } catch (Exception exception) {
+         exception.printStackTrace();
+        }
+        return GetFavoriteListResponseDto.success(resultSets);
     }
 
     //  게시물 작성
@@ -124,6 +145,8 @@ public class BoardServiceImplement implements BoardService{
         return PutFavoriteResponseDto.success();
 
     }
+
+    
 
     
     
