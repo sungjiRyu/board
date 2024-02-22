@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     // existsBy(객체 ==   객체가존재하면 True 
     boolean existsByUserEmail(String email);
     boolean existsByUserNickname(String nickname);
-    boolean existsByUserTelNum(String nickname);
+    boolean existsByUserTelNum(String telNum);
 
     UserEntity findByUserEmail(String email);
 

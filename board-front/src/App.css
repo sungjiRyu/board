@@ -1,3 +1,8 @@
+.divider {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
 .black-large-full-button {
     width: 100%;
     height: 48px;
@@ -166,4 +171,12 @@
 
 .expand-right-light-icon {
     background-image: url(assets/image/expand-right-light.png);
+}
+
+.image-box-light-icon {
+    background-image: url(assets/image/image-box-light.png);
+}
+
+.close-icon {
+    background-image: url(assets/image/close.png);
 }
