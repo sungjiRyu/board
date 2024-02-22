@@ -10,6 +10,7 @@ import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer>{
 
+    boolean existsByBoardSeq(Integer boardNumber);
     BoardEntity findByBoardSeq(Integer boardNumber);
     
     @Query(

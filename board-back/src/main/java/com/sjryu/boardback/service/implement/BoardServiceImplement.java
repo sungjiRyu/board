@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 import com.sjryu.boardback.entity.BoardEntity;
+import com.sjryu.boardback.entity.FavoriteEntity;
 import com.sjryu.boardback.entity.ImageEntity;
 import com.sjryu.boardback.repository.BoardRepository;
+import com.sjryu.boardback.repository.FavoriteRepository;
 import com.sjryu.boardback.repository.ImageRepository;
 import com.sjryu.boardback.repository.UserRepository;
 import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
@@ -27,7 +30,9 @@ public class BoardServiceImplement implements BoardService{
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final BoardRepository boardRepository;
+    private final FavoriteRepository favoriteRepository;
 
+    //  게시물 조회
     @Override
     public ResponseEntity<? super GetBoardResponseDto> getBoard(Integer boardNumber) {
 
@@ -54,10 +59,9 @@ public class BoardServiceImplement implements BoardService{
 
     }
 
+    //  게시물 작성
     @Override
     public ResponseEntity<? super PostBoardResponseDto> postBoard(PostBoardRequestDto dto, String email) {
-        
-        
 
         try {
             
@@ -84,6 +88,41 @@ public class BoardServiceImplement implements BoardService{
             return ResponseDto.databaseError();
         }
         return PostBoardResponseDto.success();
+    }
+
+    //  좋아요
+    @Override
+    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer boardNumber, String email) {
+        
+        try {
+
+            boolean existedUser = userRepository.existsByUserEmail(email);
+            if(!existedUser) return PutFavoriteResponseDto.noExistUser();
+
+            BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
+            if(boardEntity == null) return PutFavoriteResponseDto.noExistBoard();
+
+            FavoriteEntity favoriteEntity = favoriteRepository.findByFavUserEmailAndFavBoardSeq(email, boardNumber);
+            if(favoriteEntity == null) {
+                favoriteEntity = new FavoriteEntity(email, boardNumber);
+                favoriteRepository.save(favoriteEntity);
+                boardEntity.decreaseFavoriteCount();
+            }
+            //  이미 좋아요를 눌렀다면
+            else {
+                favoriteRepository.delete(favoriteEntity);
+                boardEntity.decreaseFavoriteCount();
+            }
+
+            boardRepository.save(boardEntity);
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PutFavoriteResponseDto.success();
+
     }
 
     

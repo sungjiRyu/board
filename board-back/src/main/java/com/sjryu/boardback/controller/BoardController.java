@@ -6,12 +6,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
+
+import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
+import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -40,6 +42,15 @@ public class BoardController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PostBoardResponseDto> response = boardService.postBoard(requestDto, email);
+        return response;
+    }
+
+    @PutMapping("/{boardNumber}/favorite")
+    public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(
+        @PathVariable("boardNumber") Integer boardNumber,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PutFavoriteResponseDto> response = boardService.putFavorite(boardNumber, email);
         return response;
     }
     
