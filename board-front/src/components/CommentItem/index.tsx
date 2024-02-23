@@ -7,8 +7,8 @@ interface Props {
     commentListItem: CommentListItem;
 }
 
-// component: component List Item 컴포넌트 //
-export default function index({ commentListItem }: Props) {
+// component: comment List Item 컴포넌트 //
+export default function CommentItem({ commentListItem }: Props) {
 
     //  properties //
     const {nickname, profileImage, writeDatetime, content} = commentListItem;
