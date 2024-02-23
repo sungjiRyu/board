@@ -1,10 +1,12 @@
 package com.sjryu.boardback.service.implement;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
@@ -21,6 +23,7 @@ import com.sjryu.boardback.repository.FavoriteRepository;
 import com.sjryu.boardback.repository.ImageRepository;
 import com.sjryu.boardback.repository.UserRepository;
 import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
+import com.sjryu.boardback.repository.resultSet.GetCommentListResultSet;
 import com.sjryu.boardback.repository.resultSet.GetFavoriteListResultSet;
 import com.sjryu.boardback.service.BoardService;
 
@@ -84,6 +87,26 @@ public class BoardServiceImplement implements BoardService{
          exception.printStackTrace();
         }
         return GetFavoriteListResponseDto.success(resultSets);
+    }
+
+    //  댓글 목록 조회
+    @Override
+    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(Integer boardNumber) {
+
+        List<GetCommentListResultSet> resultSets = new ArrayList<>();
+
+        try {
+            
+            boolean existedBoard = boardRepository.existsByBoardSeq(boardNumber);
+            if(!existedBoard) return GetCommentListResponseDto.noExistBoard();
+
+            resultSets = commentRespository.getCommentList(boardNumber);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return GetCommentListResponseDto.success(resultSets);
+        
     }
 
     //  게시물 작성
@@ -179,6 +202,8 @@ public class BoardServiceImplement implements BoardService{
         return PutFavoriteResponseDto.success();
 
     }
+
+   
 
     
 

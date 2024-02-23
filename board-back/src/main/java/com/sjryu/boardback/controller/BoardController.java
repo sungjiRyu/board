@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 
 @RestController
 @RequestMapping("/api/v1/board")
@@ -43,6 +44,14 @@ public class BoardController {
         @PathVariable("boardNumber") Integer boardNumber
     ){
         ResponseEntity<? super GetFavoriteListResponseDto> response = boardService.getFavoriteList(boardNumber);
+        return response;
+    }
+
+    @GetMapping("/{boardNumber}/comment-list")
+    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
+    @PathVariable("boardNumber") Integer boardNumber
+    ){
+        ResponseEntity<? super GetCommentListResponseDto> response = boardService.getCommentList(boardNumber);
         return response;
     }
 
