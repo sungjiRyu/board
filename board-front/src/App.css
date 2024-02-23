@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.emphasis {
+    font-weight: bolder;
+}
+
 .black-large-full-button {
     width: 100%;
     height: 48px;
@@ -183,4 +187,24 @@
 
 .more-icon {
     background-image: url(assets/image/more.png);
+}
+
+.favorite-fill-icon {
+    background-image: url(assets/image/favorite-fill.png);
+}
+
+.favorite-light-icon {
+    background-image: url(assets/image/favorite-light.png);
+}
+
+.up-light-icon {
+    background-image: url(assets/image/expand-up-light.png);
+}
+
+.up-down-icon {
+    background-image: url(assets/image/expand-down-light.png);
+}
+
+.comment-icon {
+    background-image: url(assets/image/chat-light.png);
 }

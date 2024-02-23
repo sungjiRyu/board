@@ -22,7 +22,7 @@ export default function BoardDetail() {
       setShowMore(!showMore);
     }
 
-    //  render:  게시물 상세 하단 컴포넌트 렌더링  //
+    //  render:  게시물 상세 상단 컴포넌트 렌더링  //
     return(
       <div id='board-detail-top'>
         <div className='board-detail-header'>
@@ -30,7 +30,7 @@ export default function BoardDetail() {
           <div className='board-detail-top-sub-box'>
             <div className='board-detail-write-info-box'>
               <div className='board-detail-writer-profile-image' style={{backgroundImage: `url(${defaultProfileImage})`}}></div>
-              <div className='board-board-detail-writer-nickname'>{'닉네임'}</div>
+              <div className='board-detail-writer-nickname'>{'닉네임'}</div>
               <div className='board-detail-info-divider'>{'\|'}</div>
               <div className='board-detail-write-date'>{'2024 .02 .23'}</div>
             </div>
@@ -56,20 +56,19 @@ export default function BoardDetail() {
   }
 
   // component:  게시물 상세 화면 하단 컴포넌트
+  const BoardDetailBottom = () => {
 
-  //  effect 
-  const [favoriteList, setFavoriteList] = useState<FavoriteListItem[]>([]);
-  const [commentList, setCommentList] = useState<CommentListItem[]>([]);
-
-  useEffect(()=>{
-
+    //  state 
+    const [favoriteList, setFavoriteList] = useState<FavoriteListItem[]>([]);
+    const [commentList, setCommentList] = useState<CommentListItem[]>([]);
+    
+    //  effect 
+    useEffect(()=>{
       setFavoriteList(favoriteListMock);
       setCommentList(commentListMock);
+    },[]);
 
-  },[]);
-
-  //  render:  게시물 상세 하단 컴포넌트 렌더링  //
-  const BoardDetailBottom = () => {
+    //  render:  게시물 상세 하단 컴포넌트 렌더링  //
     return(
      <div id='board-detail-bottom'>
       <div className='board-detail-bottom-button-box'>
@@ -111,7 +110,7 @@ export default function BoardDetail() {
         <div className='board-detail-bottom-comment-pagination-box'>
           <Pagination/>
         </div>
-        <div className='board-detail-bottom-comment-input-container'>
+        <div className='board-detail-bottom-comment-input-box'>
           <div className='board-detail-bottom-comment-input-container'>
             <textarea className='board-detail-bottom-comment-textarea' placeholder='댓글을 작성해주세요.'/>
             <div className='board-detail-bottom-comment-button-box'>
