@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
-
+import com.sjryu.boardback.dto.request.board.PostCommentRequestDto;
 import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -47,10 +48,20 @@ public class BoardController {
 
     @PostMapping("")
     public ResponseEntity<? super PostBoardResponseDto> postBoard(
-        @RequestBody @Valid PostBoardRequestDto requestDto,
+        @RequestBody @Valid PostBoardRequestDto requestBody,
         @AuthenticationPrincipal String email
     ){
-        ResponseEntity<? super PostBoardResponseDto> response = boardService.postBoard(requestDto, email);
+        ResponseEntity<? super PostBoardResponseDto> response = boardService.postBoard(requestBody, email);
+        return response;
+    }
+
+    @PostMapping("/{boardNumber}/comment")
+    public ResponseEntity<? super PostCommentResponseDto> postComment(
+        @RequestBody @Valid PostCommentRequestDto requestBody,
+        @PathVariable ("boardNumber") Integer boardNumber,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PostCommentResponseDto> response = boardService.postComment(requestBody,boardNumber, email);
         return response;
     }
 

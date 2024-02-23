@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
+import com.sjryu.boardback.util.dateTime;
 
 
 @Getter
@@ -36,10 +37,7 @@ public class BoardEntity {
     
     public BoardEntity(PostBoardRequestDto dto, String email) {
 
-    Date now = Date.from(Instant.now());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    String writeDatetime = simpleDateFormat.format(now);
-
+    String writeDatetime = dateTime.simpleDateTime();
 
     this.boardUserEmail = email;
     this.boardTitle = dto.getTitle();
@@ -50,18 +48,23 @@ public class BoardEntity {
     this.boardCommentCnt = 0;
         
     }
-
+    //  조회수 +1
     public void increaseViewCount() {
         this.boardViewCnt++;
     }
-
+    //  좋아요 +1
     public void increaseFavoriteCount() {
         this.boardFavoriteCnt++;
     }
 
+    //  좋아요 -1
     public void decreaseFavoriteCount() {
         this.boardFavoriteCnt--;
     }
+
+    //  댓글 갯수 +1
+    public void increaseCommentCount() {
+        this.boardCommentCnt++;    }
 
 
 }
