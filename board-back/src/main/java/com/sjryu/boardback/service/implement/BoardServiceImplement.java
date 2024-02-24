@@ -164,7 +164,7 @@ public class BoardServiceImplement implements BoardService{
         return PostCommentResponseDto.sucess();
     }
 
-    //  좋아요
+    //  좋아요 기능
     @Override
     public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer boardNumber, String email) {
         
