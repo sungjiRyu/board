@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import { MAIN_PATH } from 'constant';
 import { useNavigate } from 'react-router-dom';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
+import { useLoginUserStore } from 'stores';
 
 // component: 인증 화면 컴포넌트 // 
 export default function Authentication() {
@@ -27,6 +28,9 @@ export default function Authentication() {
   //  component: signIn card 컴포넌트  //
   const SignInCard = () => {
 
+
+    //  state:  로그인 유저 상태  //
+    const { loginUser } = useLoginUserStore();
     //  state: 이메일 요소 참조 상태  //
     const emailRef = useRef<HTMLInputElement | null>(null);
     //  state: 패스워드 요소 참조 상태  //
@@ -57,6 +61,8 @@ export default function Authentication() {
         const { token, expirationTime } = responseBody as SignInResponseDto;
         const now = new Date().getTime();
         const expires = new Date(now + expirationTime * 1000);
+        
+        
 
         setCookie('accessToken', token, {expires, path: MAIN_PATH()});
         navigator(MAIN_PATH());
@@ -397,7 +403,6 @@ export default function Authentication() {
       const requestBody: SignUpRequestDto = {
         email, password, nickname, telNumber, address, addressDetail, agreedPersonal 
       }
-      console.log(requestBody)
       signUpRequest(requestBody).then(signUpResponse);
 
     };
