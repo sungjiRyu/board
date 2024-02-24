@@ -6,7 +6,7 @@ import { access } from "fs";
 import { GetSignInUserResponseDto } from "./response/user";
 import { PostBoardRequestDto,  } from "./request/board";
 import { request } from "http";
-import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto } from "./response/board";
+import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto, GetFavoriteResponseDto, GetCommentListResponseDto } from "./response/board";
 import { Board } from "types/enum/interface";
 
 
@@ -59,6 +59,8 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 const GET_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}`;
 const INCREASE_VIEW_COUNT_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/increase-view-count`
 const POST_BOARD_URL = () => `${API_DOMAIN}/board`;
+const GET_FAVORITE_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/favorite-list`;
+const GET_COMMENT_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
 
 //  게시물 상세보기
 export const getBoardRequest = async (boardNumber: number | string) => {
@@ -76,6 +78,36 @@ export const getBoardRequest = async (boardNumber: number | string) => {
 
 }
 
+//  좋아요 리스트 불러오기
+export const getFavoriteListRequest = async (boardNumber: number | string) => {
+    const result = await axios.get(GET_FAVORITE_LIST_URL(boardNumber))
+        .then(response => {
+            const responseBody: GetFavoriteResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
+//  댓글 리스트 불러오기
+export const getCommentListRequest = async (boardNumber: number | string) => {
+    const result = await axios.get(GET_COMMENT_LIST_URL(boardNumber))
+        .then(response => {
+            const responseBody: GetCommentListResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        })
+    return result;
+}
+
 //  게시물 조회수 증가
 export const IncreaseViewCountRequest = async (boardNumber: number | string) => {
     const result = await axios.patch(INCREASE_VIEW_COUNT_URL(boardNumber))
@@ -90,6 +122,8 @@ export const IncreaseViewCountRequest = async (boardNumber: number | string) => 
         })
     return result;
 }
+
+
 
 //  게시물 작성
 export const PostBoardRequest = async(requestBody: PostBoardRequestDto, accessToken:string) => {
