@@ -40,9 +40,9 @@ public class GetBoardResponseDto extends ResponseDto {
         this.title = resultSet.getBoardTitle();
         this.content = resultSet.getBoardContent();
         this.boardImageList = boardImageList;
-        this.writeDatetime = getWriteDatetime();
-        this.writerEmail = getWriterEmail();
-        this.writerNickname = getWriterNickname();
+        this.writeDatetime = resultSet.getBoardWriteDatetime();
+        this.writerEmail = resultSet.getBoardUserEmail();
+        this.writerNickname = resultSet.getUserNickname();
         this.writerProfileImage = getWriterProfileImage();
     }
     

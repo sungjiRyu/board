@@ -8,6 +8,7 @@ import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
@@ -51,17 +52,12 @@ public class BoardServiceImplement implements BoardService{
         List<ImageEntity> imageEntities = new ArrayList<>();
 
         try {
-
             resultSet = boardRepository.getBoard(boardNumber);
             if(resultSet == null) return GetBoardResponseDto.noExistBoard();
 
             imageEntities = imageRepository.findByImgBoardSeq(boardNumber);
 
-            BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
-            boardEntity.increaseViewCount();
-            boardRepository.save(boardEntity);
             
-
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -184,7 +180,7 @@ public class BoardServiceImplement implements BoardService{
             if(favoriteEntity == null) {
                 favoriteEntity = new FavoriteEntity(email, boardNumber);
                 favoriteRepository.save(favoriteEntity);
-                boardEntity.decreaseFavoriteCount();
+                boardEntity.increaseFavoriteCount();
             }
             //  이미 좋아요를 눌렀다면
             else {
@@ -201,6 +197,25 @@ public class BoardServiceImplement implements BoardService{
 
         return PutFavoriteResponseDto.success();
 
+    }
+
+    @Override
+    public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(Integer boardNumber) {
+      try {
+
+        BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
+        if (boardEntity == null) return IncreaseViewCountResponseDto.noExistedBoard();
+
+        boardEntity = boardRepository.findByBoardSeq(boardNumber);
+        boardEntity.increaseViewCount();
+        boardRepository.save(boardEntity);
+
+      } catch (Exception exception) {
+        exception.printStackTrace();
+        return ResponseDto.databaseError();
+      }
+
+      return IncreaseViewCountResponseDto.success();
     }
 
    

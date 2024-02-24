@@ -13,6 +13,10 @@ import { BOARD_PATH, BOARD_UPDATE_PATH, MAIN_PATH, USER_PATH } from 'constant';
 import boardMock from 'mocks/board.mock';
 import { useLoginUserStore } from 'stores';
 import BoardUpdate from '../Update';
+import { IncreaseViewCountRequest, getBoardRequest } from 'apis';
+import GetBoardResponseDto from 'apis/response/board/get-board.response.dto';
+import { ResponseDto } from 'apis/response';
+import { IncreaseViewCountResponseDto } from 'apis/response/board';
 
 
 // component: 게시물 상세 화면 컴포넌트 //
@@ -26,20 +30,50 @@ export default function BoardDetail() {
 
   //  function:  네비게이트 함수  //
   const navigator = useNavigate();
+  //  function:  IncreaseViewCountRequest 처리 함수  //
+  const increaseViewCountResponse = (responseBody: IncreaseViewCountResponseDto | ResponseDto | null) => {
+    if(!responseBody) return;
+    const { code } = responseBody;
+    if(code === 'NB') alert('존재하지 않는 게시물입니다.');
+    if(code === 'DBE') alert('데이터베이스 오류입니다.');
+  }
+  
 
   // component:  게시물 상세 화면 상단 컴포넌트
   const BoardDetailTop = () => {
 
+    //state:  작성자 여부 상태  //
+    const [isWriter, setIsWriter] = useState<boolean>(false);
     //  state:  게시물 상태  //
     const [board, setBoard] = useState<Board | null>(null);
-
     //  state:  more 버튼 상태  //
     const [showMore, setShowMore] = useState<boolean>(false);
 
-     //  event handler: 닉네임 버튼 클릭 이벤트 처리  //
-     const onNicknameClickHandler = () => {
-      if(!board) return;
-      navigator(USER_PATH(board.writerEmail));
+    //  function:  get board response 처리 함수  //
+    const getBoardResponse = (responseBody: GetBoardResponseDto | ResponseDto | null) => {
+      if(!responseBody) return;
+      const { code } = responseBody;
+      if(code === 'NB') alert('존재하지 않는 게시물입니다.')
+      if(code === 'DBE') alert('데이터베이스 오류입니다.')
+      if(code !== 'SU'){ 
+        navigator(MAIN_PATH());
+        return;
+      }
+      const board: Board = { ...responseBody as GetBoardResponseDto }
+      setBoard(board);
+
+      if(!loginUser){
+        setIsWriter(false);
+        return;
+      }
+      const isWriter = loginUser.email === board.writerEmail;
+      setIsWriter(isWriter);
+    }
+
+    //  event handler: 닉네임 버튼 클릭 이벤트 처리  //
+    const onNicknameClickHandler = () => {
+    if(!board) return;
+    navigator(USER_PATH(board.writerEmail));
     }
     //  event handler: more 버튼 클릭 이벤트 처리  //
     const onMoreButtonClickHandler = () => {
@@ -63,8 +97,12 @@ export default function BoardDetail() {
 
     //  effect:  게시물 번호 path variable이 바뀔때 마다 게시물 불러오기  //
     useEffect(()=>{
-      setBoard(boardMock);
-    },[])
+      if(!boardNumber) {
+       navigator(MAIN_PATH());
+       return;
+      }
+      getBoardRequest(boardNumber).then(getBoardResponse);
+     },[boardNumber]);
 
     //  render:  게시물 상세 상단 컴포넌트 렌더링  //
     if (!board) return <></>
@@ -79,9 +117,11 @@ export default function BoardDetail() {
               <div className='board-detail-info-divider'>{'\|'}</div>
               <div className='board-detail-write-date'>{board.writeDatetime}</div>
             </div>
+            {isWriter &&
             <div className='icon-button' onClick={onMoreButtonClickHandler}>
               <div className='icon more-icon'></div>
             </div>
+            }
             {showMore &&
             <div className='board-detail-more-box'>
               <div className='board-detail-update-button' onClick={onUpdateButtonClickHandler}>{'수정'}</div>
@@ -147,8 +187,7 @@ export default function BoardDetail() {
     
     //  effect:  게시물 번호 path variable 이 바뀔 때 마다 좋아요 및 댓글 리스트 불러오기  //
     useEffect(()=>{
-      setFavoriteList(favoriteListMock);
-      setCommentList(commentListMock);
+     
     },[boardNumber]);
 
     //  render:  게시물 상세 하단 컴포넌트 렌더링  //
@@ -218,6 +257,17 @@ export default function BoardDetail() {
      </div>
     )
   }
+
+  // effect:  게시물 번호 path variable 바뀔때 마다 게시물 조회수 증가  //
+  let effectFlag = true;
+  useEffect(()=>{
+    if(!boardNumber) return;
+    if(effectFlag){
+      effectFlag = false;
+      return;
+    }
+    IncreaseViewCountRequest(boardNumber).then(increaseViewCountResponse);
+  },[boardNumber])
 
   // render: 게시물 상세 화면 컴포넌트 렌더링//
   return (
