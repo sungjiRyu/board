@@ -187,7 +187,7 @@ export default function Header() {
         const url = await fileUploadRequest(data);
         if (url) boardImageList.push(url);
       }
-
+      
       const requestBody: PostBoardRequestDto = {
         title, content, boardImageList
       }

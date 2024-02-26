@@ -7,11 +7,14 @@ import org.springframework.stereotype.Repository;
 import com.sjryu.boardback.entity.BoardEntity;
 import com.sjryu.boardback.repository.resultSet.GetBoardResultSet;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer>{
 
     boolean existsByBoardSeq(Integer boardNumber);
     BoardEntity findByBoardSeq(Integer boardNumber);
+
     
     @Query(
         value = 
@@ -30,5 +33,6 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer>{
         nativeQuery = true
     )
     GetBoardResultSet getBoard(Integer boardNumber);
+
     
 }
