@@ -109,6 +109,16 @@
     justify-content: center;
 }
 
+.icon-box-small {
+    width: 16px;
+    height: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
 .icon-button {
     border-radius: 50% 50%;
 
@@ -173,8 +183,12 @@
     background-image: url(assets/image/check-round-fill.png);
 }
 
-.expand-right-light-icon {
-    background-image: url(assets/image/expand-right-light.png);
+.expand-right-icon {
+    background-image: url(assets/image/expand-right.png);
+}
+
+.expand-left-icon {
+    background-image: url(assets/image/expand-left.png);
 }
 
 .image-box-light-icon {
