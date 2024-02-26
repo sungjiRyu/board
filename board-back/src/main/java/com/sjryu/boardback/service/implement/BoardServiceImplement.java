@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
+import com.sjryu.boardback.dto.reponse.board.DeleteBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
@@ -216,6 +217,36 @@ public class BoardServiceImplement implements BoardService{
       }
 
       return IncreaseViewCountResponseDto.success();
+    }
+
+    //  게시물 삭제
+    @Override
+    public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(Integer boardNumber, String email) {
+        
+       try {
+        
+        boolean existedUser = userRepository.existsByUserEmail(email);
+        if(!existedUser) return DeleteBoardResponseDto.noExistUser();
+
+        BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
+        if(boardEntity == null) return DeleteBoardResponseDto.noExistBoard();
+
+        String writerEmail = boardEntity.getBoardUserEmail();
+        boolean isWriter = writerEmail.equals(email);
+        if(!isWriter) return DeleteBoardResponseDto.noPermission();
+
+        imageRepository.deleteByImgBoardSeq(boardNumber);
+        favoriteRepository.deleteByFavBoardSeq(boardNumber);
+        commentRespository.deleteByCommentBoardSeq(boardNumber);
+
+        boardRepository.delete(boardEntity);
+        
+       } catch (Exception exception) {
+
+        exception.printStackTrace();
+
+       }
+       return DeleteBoardResponseDto.success();
     }
 
    

@@ -4,6 +4,7 @@ import { useBoardStore, useLoginUserStore } from 'stores';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_PATH } from 'constant';
 import { useCookies } from 'react-cookie';
+import { fileUploadRequest } from 'apis';
 
 // component: 게시물 작성 화면 컴포넌트 //
 export default function BoardWrite() {
@@ -53,11 +54,11 @@ export default function BoardWrite() {
     const file = event.target.files[0];
     // 파일 미리보기
     const imageUrl = URL.createObjectURL(file);
-    const newImageUrls = imageUrls.map(item => item);
+    const newImageUrls = imageUrls.slice();
     newImageUrls.push(imageUrl);
     setImageUrls(newImageUrls);
     // 파일 업로드
-    const newBoardImageFileList = boardImageFileList.map(item => item);
+    const newBoardImageFileList = boardImageFileList.slice();
     newBoardImageFileList.push(file);
     setBoardImageFileList(newBoardImageFileList);
 
