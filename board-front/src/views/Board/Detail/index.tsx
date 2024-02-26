@@ -20,7 +20,9 @@ import { DeleteBoardResponseDto, GetCommentListResponseDto, GetFavoriteResponseD
 import dayjs from 'dayjs';
 import { useCookies } from 'react-cookie';
 import { PostCommentRequestDto } from 'apis/request/board';
+
 import { usePagination } from 'hooks';
+
 
 
 // component: 게시물 상세 화면 컴포넌트 //
@@ -335,7 +337,11 @@ export default function BoardDetail() {
         <div className='board-detail-bottom-comment-container'>
           <div className='board-detail-bottom-comment-title'>{'댓글 '}<span className='emphasis'>{totalCommentCount}</span></div>
           <div className='board-detail-bottom-comment-list-container'>
+
             {viewList.map((item,index) => <CommentItem key={index} commentListItem={item}/>)}
+=======
+
+
           </div>
         </div>
         <div className='divider'></div>
