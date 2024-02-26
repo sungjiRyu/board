@@ -16,7 +16,7 @@ const useBoardStore = create<BoardStore>(set => ({
     boardImageFileList: [],
     setTitle: (title) => set(state => ({...state, title})),
     setContent: (content) => set(state => ({...state, content})),
-    setBoardImageFileList: (boardImageFilList) => set(state => ({...state, boardImageFilList})),
+    setBoardImageFileList: (boardImageFileList) => set(state => ({...state, boardImageFileList})),
     resetBoard: () => set(state => ({...state, title:'', content:'', boardImageFilList:[]}))
 }));
 

@@ -3,6 +3,7 @@ package com.sjryu.boardback.controller;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.DeleteBoardResponseDto;
 
 @RestController
 @RequestMapping("/api/v1/board")
@@ -92,5 +94,13 @@ public class BoardController {
         ResponseEntity<? super IncreaseViewCountResponseDto> response = boardService.increaseViewCount(boardNumber);
         return response;
     }
-    
+
+    @DeleteMapping("/{boardNumber}")
+    public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(
+        @PathVariable("boardNumber") Integer boardNumber,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super DeleteBoardResponseDto> response = boardService.deleteBoard(boardNumber, email);
+        return response;
+    }
 }
