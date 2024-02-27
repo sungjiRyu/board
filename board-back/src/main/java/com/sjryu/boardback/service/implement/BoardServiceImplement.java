@@ -9,6 +9,8 @@ import com.sjryu.boardback.dto.reponse.board.DeleteBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
@@ -18,9 +20,11 @@ import com.sjryu.boardback.dto.request.board.PatchBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostCommentRequestDto;
 import com.sjryu.boardback.entity.BoardEntity;
+import com.sjryu.boardback.entity.BoardListViewEntity;
 import com.sjryu.boardback.entity.CommentEntity;
 import com.sjryu.boardback.entity.FavoriteEntity;
 import com.sjryu.boardback.entity.ImageEntity;
+import com.sjryu.boardback.repository.BoardListViewRepository;
 import com.sjryu.boardback.repository.BoardRepository;
 import com.sjryu.boardback.repository.CommentRepository;
 import com.sjryu.boardback.repository.FavoriteRepository;
@@ -31,7 +35,11 @@ import com.sjryu.boardback.repository.resultSet.GetCommentListResultSet;
 import com.sjryu.boardback.repository.resultSet.GetFavoriteListResultSet;
 import com.sjryu.boardback.service.BoardService;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +53,7 @@ public class BoardServiceImplement implements BoardService{
     private final BoardRepository boardRepository;
     private final FavoriteRepository favoriteRepository;
     private final CommentRepository commentRespository;
+    private final BoardListViewRepository boardListViewRepository;
 
 
     //  게시물 조회
@@ -105,6 +114,46 @@ public class BoardServiceImplement implements BoardService{
             exception.printStackTrace();
         }
         return GetCommentListResponseDto.success(resultSets);
+        
+    }
+
+    //  최신 게시물 조회
+    @Override
+    public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList() {
+
+        List<BoardListViewEntity> boardListViewEntities = new ArrayList<>();
+
+        try {
+
+            boardListViewEntities =  boardListViewRepository.findByOrderByBoardWriteDatetimeDesc();
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetLatestBoardListResponseDto.success(boardListViewEntities);
+        
+    }
+
+    //  주간 Top3 게시물 
+    @Override
+    public ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList() {
+
+        List<BoardListViewEntity> boardListViewEntities = new ArrayList<>();
+
+        try {
+            
+            Date beforeWeek = Date.from(Instant.now().minus(7,ChronoUnit.DAYS));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String sevenDaysAgo = simpleDateFormat.format(beforeWeek);
+
+            boardListViewEntities = boardListViewRepository.findTop3ByBoardWriteDatetimeGreaterThanOrderByBoardFavoriteCntDescBoardCommentCntDescBoardViewCntDescBoardWriteDatetimeDesc(sevenDaysAgo);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetTop3BoardListResponseDto.success(boardListViewEntities);
         
     }
 
@@ -285,6 +334,10 @@ public class BoardServiceImplement implements BoardService{
        }
        return DeleteBoardResponseDto.success();
     }
+
+    
+
+    
 
     
     

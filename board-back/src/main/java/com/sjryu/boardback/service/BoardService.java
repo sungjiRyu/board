@@ -11,6 +11,8 @@ import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
 import com.sjryu.boardback.dto.reponse.board.DeleteBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
 
 import com.sjryu.boardback.dto.request.board.PatchBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
@@ -21,6 +23,8 @@ public interface BoardService {
     ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Integer boardNumber);
     ResponseEntity<? super PostBoardResponseDto> postBoard(PostBoardRequestDto dto, String email);
     ResponseEntity<? super PostCommentResponseDto> postComment(PostCommentRequestDto dto, Integer boardNumber, String email);
+    ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoardList();
+    ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList();
     ResponseEntity<? super GetCommentListResponseDto> getCommentList(Integer boardNumber);
     ResponseEntity<? super GetBoardResponseDto> getBoard(Integer boardNumber);
     ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer boardNumber, String email);
