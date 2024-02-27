@@ -10,9 +10,11 @@ import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
+import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PutFavoriteResponseDto;
+import com.sjryu.boardback.dto.request.board.PatchBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostCommentRequestDto;
 import com.sjryu.boardback.entity.BoardEntity;
@@ -200,6 +202,41 @@ public class BoardServiceImplement implements BoardService{
 
     }
 
+    //  게시물 수정
+    @Override
+    public ResponseEntity<? super PatchBoardResponseDto> patchBoard(PatchBoardRequestDto dto, Integer boardNumber,
+            String email) {
+       try {
+        BoardEntity boardEntity = boardRepository.findByBoardSeq(boardNumber);
+        if (boardEntity == null) return PatchBoardResponseDto.noExistBoard();
+        
+        boolean existedUser = userRepository.existsByUserEmail(email);
+        if(!existedUser) return PatchBoardResponseDto.noExistUser();
+
+        String writerEmail = boardEntity.getBoardUserEmail();
+        if(writerEmail == null) return PatchBoardResponseDto.noPermission();
+
+        boardEntity.patchBoard(dto);
+        boardRepository.save(boardEntity);
+
+        imageRepository.deleteByImgBoardSeq(boardNumber);
+        List<String> boardImageList = dto.getBoardImageList();
+        List<ImageEntity> imageEntities = new ArrayList<>();
+
+        for (String image : boardImageList){
+            ImageEntity imageEntity = new ImageEntity(boardNumber, image);
+            imageEntities.add(imageEntity);
+        }
+
+        imageRepository.saveAll(imageEntities);
+
+       } catch (Exception exception) {
+            exception.printStackTrace();
+       }
+       return PatchBoardResponseDto.success();
+    }
+
+    //  조회수 증가
     @Override
     public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(Integer boardNumber) {
       try {
@@ -248,6 +285,11 @@ public class BoardServiceImplement implements BoardService{
        }
        return DeleteBoardResponseDto.success();
     }
+
+    
+    
+
+    
 
    
 
