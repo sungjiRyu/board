@@ -177,7 +177,6 @@ export const PatchBoardRequest = async(boardNumber: number | string, requestBody
     })
     return result;
 }
-PATCH_BOARD_URL
 
 //  좋아요 기능
 export const PutFavoriteRequest = async(boardNumber: number | string, accessToken: string) => {
