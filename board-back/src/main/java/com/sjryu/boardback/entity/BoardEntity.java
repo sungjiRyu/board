@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 
+import com.sjryu.boardback.dto.request.board.PatchBoardRequestDto;
 import com.sjryu.boardback.dto.request.board.PostBoardRequestDto;
 import com.sjryu.boardback.util.dateTime;
 
@@ -66,5 +67,9 @@ public class BoardEntity {
     public void increaseCommentCount() {
         this.boardCommentCnt++;    }
 
-
+    //  게시물 수정
+    public void patchBoard(PatchBoardRequestDto dto){
+        this.boardTitle = dto.getTitle();
+        this.boardContent = dto.getContent();
+    }
 }

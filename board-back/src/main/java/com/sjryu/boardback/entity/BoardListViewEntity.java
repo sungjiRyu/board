@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+
 
 @Getter
 @NoArgsConstructor
@@ -25,7 +25,7 @@ public class BoardListViewEntity {
     private int boardViewCnt;
     private int boardFavoriteCnt;
     private int boardCommentCnt;
-    private LocalDate boardWriteDatetime;
+    private String boardWriteDatetime;
     private String userNickname;
     private String userProfileImg;
 }

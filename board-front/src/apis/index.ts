@@ -4,7 +4,7 @@ import { SignInResponseDto, SignUpResponseDto } from "./response/auth";
 import { ResponseDto } from "./response";
 import { access } from "fs";
 import { GetSignInUserResponseDto } from "./response/user";
-import { PostBoardRequestDto, PostCommentRequestDto } from "./request/board";
+import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./request/board";
 import { request } from "http";
 import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto,
         GetFavoriteResponseDto, GetCommentListResponseDto, PutFavoriteResponseDto,
@@ -12,6 +12,7 @@ import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto
 import { Board } from "types/enum/interface";
 import { Cookies } from "react-cookie";
 import { error } from "console";
+import PatchBoardResponseDto from "./response/board/patch-board.response.dto";
 
 
 
@@ -22,7 +23,6 @@ const API_DOMAIN = `${DOMAIN}/api/v1`;
 const authorization = (accessToken: string) => {
     return {headers: {Authorization: `Bearer ${accessToken}`}}
 };
-
 
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`; 
@@ -64,6 +64,7 @@ const GET_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${b
 const INCREASE_VIEW_COUNT_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/increase-view-count`
 const POST_BOARD_URL = () => `${API_DOMAIN}/board`;
 const POST_COMMENT_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/comment`
+const PATCH_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}`
 const GET_FAVORITE_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/favorite-list`;
 const GET_COMMENT_LIST_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/comment-list`;
 const PUT_FAVORITE_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}/favorite`
@@ -159,6 +160,21 @@ export const PostCommentRequest = async(boardNumber: number | string, requestBod
             const responseBody: ResponseDto = error.response.data;
             return responseBody;
         })
+    return result;
+}
+
+//  게시물 수정
+export const PatchBoardRequest = async(boardNumber: number | string, requestBody: PatchBoardRequestDto, accessToken: string) => {
+    const result = await axios.patch(PATCH_BOARD_URL(boardNumber), requestBody, authorization(accessToken))
+    .then(response => {
+        const responseBody: PatchBoardResponseDto = response.data;
+        return responseBody;
+    })
+    .catch(error => {
+        if(!error.response.data) return null;
+        const responseBody: ResponseDto = error.response.data;
+        return responseBody;
+    })
     return result;
 }
 
