@@ -22,6 +22,8 @@ import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import com.sjryu.boardback.dto.reponse.board.GetBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetCommentListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.DeleteBoardResponseDto;
+
 
 @RestController
 @RequestMapping("/api/v1/board")
@@ -108,6 +111,19 @@ public class BoardController {
         ResponseEntity<? super IncreaseViewCountResponseDto> response = boardService.increaseViewCount(boardNumber);
         return response;
     }
+
+    @GetMapping("/latest-list")
+    public ResponseEntity<? super GetLatestBoardListResponseDto> getLatestBoard() {
+        ResponseEntity<? super GetLatestBoardListResponseDto> response = boardService.getLatestBoardList();
+        return response;
+    }
+
+    @GetMapping("/top-3")
+    public ResponseEntity<? super GetTop3BoardListResponseDto> getTop3BoardList() {
+        ResponseEntity<? super GetTop3BoardListResponseDto> response = boardService.getTop3BoardList();
+        return response;
+    }
+    
 
     @DeleteMapping("/{boardNumber}")
     public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(
