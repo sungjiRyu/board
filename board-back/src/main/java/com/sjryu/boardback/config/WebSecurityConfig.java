@@ -47,7 +47,6 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(request -> request
                 .requestMatchers("/","/api/v1/auth/***", "/api/v1/search/***", "/file/***").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/api/v1/user/*").permitAll()
-                .requestMatchers(HttpMethod.PATCH, "/api/v1/board/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exceptionHandling -> exceptionHandling

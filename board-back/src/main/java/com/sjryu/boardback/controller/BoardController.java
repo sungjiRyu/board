@@ -1,6 +1,7 @@
 package com.sjryu.boardback.controller;
 
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,7 @@ import com.sjryu.boardback.dto.reponse.board.PostCommentResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetSearchBoardListResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -123,7 +125,15 @@ public class BoardController {
         ResponseEntity<? super GetTop3BoardListResponseDto> response = boardService.getTop3BoardList();
         return response;
     }
-    
+
+    @GetMapping(value={"/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}"})
+    public ResponseEntity<? super GetSearchBoardListResponseDto> getSearchBoardList(
+        @PathVariable ("searchWord") String searchWord,
+        @PathVariable (value="preSearchWord", required=false) String preSearchWord
+    ){
+        ResponseEntity<? super GetSearchBoardListResponseDto> response = boardService.getSearchBoardList(searchWord, preSearchWord);
+        return response;
+    }
 
     @DeleteMapping("/{boardNumber}")
     public ResponseEntity<? super DeleteBoardResponseDto> deleteBoard(

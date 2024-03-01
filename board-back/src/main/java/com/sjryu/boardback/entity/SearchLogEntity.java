@@ -22,4 +22,12 @@ public class SearchLogEntity {
     private String searchRelationWord;
     private boolean searchRelation;
 
+    public SearchLogEntity(String searchWord, String relationWord, boolean relation){
+
+        this.searchWord = searchWord;
+        this.searchRelationWord = relationWord;
+        this.searchRelation = relation;
+    }
+
+
 }
