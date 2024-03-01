@@ -47,12 +47,12 @@ export default function BoardItem({ boardListItem }: Props) {
                     {`댓글 ${commentCount} · 좋아요 ${favoriteCount} · 조회수 ${viewCount}`}
                 </div>
             </div>
-            {boardTitleImage !== null &&(
-                <div className='board-list-item-image-box'>
-                    <div className='board-list-item-image' style={{backgroundImage: `url(${boardTitleImage})`}}></div>
-            </div>
-            )}
         </div>
+    {boardTitleImage !== null &&(
+        <div className='board-list-item-image-box'>
+            <div className='board-list-item-image' style={{backgroundImage: `url(${boardTitleImage})`}}></div>
+        </div>
+    )}
         
         
     </div>
