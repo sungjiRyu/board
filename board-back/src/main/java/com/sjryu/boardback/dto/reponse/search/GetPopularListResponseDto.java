@@ -22,11 +22,11 @@ public class GetPopularListResponseDto extends ResponseDto {
     private GetPopularListResponseDto(List<GetPopularListResultSet> resultSets) {
         super(ResponseCode.SUCCES, ResponseMessage.SUCCES);
 
-        List<String> popuLarWordList = new ArrayList<>();
+        List<String> popularWordList = new ArrayList<>();
 
         for(GetPopularListResultSet resultSet : resultSets){
             String popularWord = resultSet.getSearchWord();
-            popuLarWordList.add(popularWord);
+            popularWordList.add(popularWord);
         }
 
         this.popularWordList = popularWordList;
