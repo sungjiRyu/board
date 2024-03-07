@@ -7,7 +7,7 @@
     align-items: center;
     gap: 30px;
 
-    border-radius: 15px;
+    border-radius: 12px;
 }
 
 .board-list-item:hover{
