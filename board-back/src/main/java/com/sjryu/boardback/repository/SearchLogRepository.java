@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.sjryu.boardback.entity.SearchLogEntity;
 import com.sjryu.boardback.repository.resultSet.GetPopularListResultSet;
+import com.sjryu.boardback.repository.resultSet.GetRelationListResultSet;
 
 @Repository
 public interface SearchLogRepository extends JpaRepository<SearchLogEntity, Integer> {
@@ -19,8 +20,23 @@ public interface SearchLogRepository extends JpaRepository<SearchLogEntity, Inte
         "GROUP BY search_word " +
         "ORDER BY count DESC " +
         "LIMIT 15; " , 
-        nativeQuery=true
+        nativeQuery = true
     )
     List<GetPopularListResultSet> getPopularList();
+
+    @Query(
+        value=
+        "SELECT search_relation_word AS searchWord, count(search_relation_word) AS count " +
+        "FROM search_log " +
+        "WHERE search_word = ?1 " +
+        "AND search_relation_word IS NOT NULL " +
+        "GROUP BY search_relation_word " +
+        "ORDER BY count DESC " +
+        "LIMIT 15; " ,
+        nativeQuery = true
+    )
+    List<GetRelationListResultSet> getRelationList(String searchWord);
+
+
     
 }

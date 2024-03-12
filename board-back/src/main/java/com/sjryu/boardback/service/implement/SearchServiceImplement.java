@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.dto.reponse.search.GetPopularListResponseDto;
+import com.sjryu.boardback.dto.reponse.search.GetRelationListResponseDto;
 import com.sjryu.boardback.repository.SearchLogRepository;
 import com.sjryu.boardback.repository.resultSet.GetPopularListResultSet;
+import com.sjryu.boardback.repository.resultSet.GetRelationListResultSet;
 import com.sjryu.boardback.service.SearchService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,24 @@ public class SearchServiceImplement implements SearchService {
         }
         return GetPopularListResponseDto.success(resultSet);
     }
+
+    @Override
+    public ResponseEntity<? super GetRelationListResponseDto> getRelationList(String searchWord) {
+       
+        List<GetRelationListResultSet> resultSets = new ArrayList<>();
+
+        try {
+
+            resultSets = searchLogRepository.getRelationList(searchWord);
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return GetRelationListResponseDto.success(resultSets);
+    }
+
 
     
     
