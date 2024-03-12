@@ -8,12 +8,12 @@ import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from
 import { request } from "http";
 import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto,
         GetFavoriteResponseDto, GetCommentListResponseDto, PutFavoriteResponseDto,
-        PostCommentResponseDto, DeleteBoardResponseDto, GetLatestBoardListResponseDto, GetTop3BoardListResponseDto } from "./response/board";
+        PostCommentResponseDto, DeleteBoardResponseDto, GetLatestBoardListResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponseDto } from "./response/board";
 import { Board } from "types/enum/interface";
 import { Cookies } from "react-cookie";
 import { error } from "console";
 import PatchBoardResponseDto from "./response/board/patch-board.response.dto";
-import { GetPopularListResponseDto } from "./response/search";
+import { GetPopularListResponseDto, GetRelationListResponseDto } from "./response/search";
 
 
 
@@ -72,6 +72,7 @@ const PUT_FAVORITE_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/
 const DELETE_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/${boardNumber}`
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`
 const GET_TOP_3_BOARD_LIST_URL = () =>  `${API_DOMAIN}/board/top-3`
+const GET_SEARCH_BOARD_LIST_URL = (searchWord: string, preSearchWord: string | null) => `${API_DOMAIN}/board/search-list/${searchWord}${preSearchWord ? '/'+ preSearchWord : ''}`;
 
 
 //  게시물 상세보기
@@ -150,7 +151,23 @@ export const getTop3BoardListRequest = async() => {
         return result;
 }
 
-const GET_POPULAR_LIST_URL = () => `${API_DOMAIN}/popular-list`
+//  검색한 게시물 목록 불러오기
+export const getSearchBoardListRequest = async (searchWord: string, preSearchWord: string | null) => {
+    const result = await axios.get(GET_SEARCH_BOARD_LIST_URL(searchWord ,preSearchWord))
+    .then(response => {
+        const responseBody: GetSearchBoardListResponseDto = response.data;
+        return responseBody;
+    })
+    .catch(error => {
+        if (!error.response) return null;
+        const responseBody: ResponseDto = error.response.data;
+        return responseBody;
+    });
+    return result;
+}
+
+const GET_POPULAR_LIST_URL = () => `${API_DOMAIN}/search/popular-list`
+const GET_RELATION_LIST_URL = (searchWord: string) => `${API_DOMAIN}/search/${searchWord}/relation-list`;
 
 //  인기검색어 불러오기
 export const getPopularListRequest = async() => {
@@ -165,6 +182,21 @@ export const getPopularListRequest = async() => {
             return responseBody;
         })
         return result;
+}
+
+//  연관검색어 불러오기
+export const GetRelationListResponseRequest = async (searchWord: string) => {
+    const result = await axios.get(GET_RELATION_LIST_URL(searchWord))
+    .then(response => {
+        const responseBody: GetRelationListResponseDto = response.data;
+        return responseBody;
+    })
+    .catch(error => {
+        if(!error.response) return null;
+        const responseBody: ResponseDto = error.response.data;
+        return responseBody;
+    })
+    return result;
 }
 
 //  게시물 조회수 증가

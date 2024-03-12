@@ -84,17 +84,15 @@ export default function Main() {
       navigate(SEARCH_PATH(word));
     }
     
-    // function:  get top 3 board list response 처리 함수  //
+    // function:  인기검색어 처리 함수  //
     const getPopularListResponse = (responseBody: GetPopularListResponseDto | ResponseDto | null) => {
-      if(!responseBody) return;;
+      if(!responseBody) return;
       const { code } = responseBody;
       if (code === 'DBE') alert('데이터베이스 오류입니다.');
       if (code !== 'SU') return;
       
       const { popularWordList } = responseBody as GetPopularListResponseDto;
       setPopularWordList(popularWordList);
-      
-      
     }
 
     //  effect:  첫 마운트 시 실행될 함수  //
