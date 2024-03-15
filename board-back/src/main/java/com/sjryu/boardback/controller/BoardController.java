@@ -26,6 +26,7 @@ import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetSearchBoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetUserBoardListResponseDto;
 import com.sjryu.boardback.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -132,6 +133,14 @@ public class BoardController {
         @PathVariable (value="preSearchWord", required=false) String preSearchWord
     ){
         ResponseEntity<? super GetSearchBoardListResponseDto> response = boardService.getSearchBoardList(searchWord, preSearchWord);
+        return response;
+    }
+
+    @GetMapping("/user-board-list/{email}")
+    public ResponseEntity<? super GetUserBoardListResponseDto> getUserBoardList(
+        @PathVariable ("email") String email
+    ){
+        ResponseEntity<? super GetUserBoardListResponseDto> response = boardService.getUserBoardList(email);
         return response;
     }
 

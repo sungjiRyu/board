@@ -3,9 +3,11 @@ package com.sjryu.boardback.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.sjryu.boardback.dto.reponse.user.GetSignInUserResponseDto;
+import com.sjryu.boardback.dto.reponse.user.GetUserResponseDto;
 import com.sjryu.boardback.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,14 @@ public class UserController {
         @AuthenticationPrincipal String email
     ) {
         ResponseEntity<? super GetSignInUserResponseDto> response = userService.getSignInUser(email);
+        return response;
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<? super GetUserResponseDto> getUser(
+        @PathVariable("email") String email
+    ) {
+        ResponseEntity<? super GetUserResponseDto> response = userService.getUser(email);
         return response;
     }
     

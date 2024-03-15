@@ -12,6 +12,7 @@ import com.sjryu.boardback.dto.reponse.board.GetFavoriteListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetLatestBoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetSearchBoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.GetTop3BoardListResponseDto;
+import com.sjryu.boardback.dto.reponse.board.GetUserBoardListResponseDto;
 import com.sjryu.boardback.dto.reponse.board.IncreaseViewCountResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PatchBoardResponseDto;
 import com.sjryu.boardback.dto.reponse.board.PostBoardResponseDto;
@@ -187,6 +188,26 @@ public class BoardServiceImplement implements BoardService{
         }
         return GetSearchBoardListResponseDto.success(boardListViewEntities);
         
+    }
+
+    //  특정 유저 게시물 리스트
+    @Override
+    public ResponseEntity<? super GetUserBoardListResponseDto> getUserBoardList(String email) {
+
+        List<BoardListViewEntity> boardListViewEntities = new ArrayList<>();
+
+        try {
+
+            boolean existedUser = userRepository.existsByUserEmail(email);
+            if (!existedUser) return GetUserBoardListResponseDto.noExistUser();
+
+            boardListViewEntities = boardListViewRepository.findByBoardUserEmailOrderByBoardWriteDatetimeDesc(email);
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetUserBoardListResponseDto.success(boardListViewEntities);
     }
 
     //  게시물 작성
@@ -366,6 +387,8 @@ public class BoardServiceImplement implements BoardService{
        }
        return DeleteBoardResponseDto.success();
     }
+
+    
 
     
 

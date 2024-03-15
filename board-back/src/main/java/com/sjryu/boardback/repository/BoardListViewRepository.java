@@ -11,8 +11,7 @@ import com.sjryu.boardback.entity.BoardListViewEntity;
 public interface BoardListViewRepository extends JpaRepository<BoardListViewEntity, Integer>{
     
     List<BoardListViewEntity> findByOrderByBoardWriteDatetimeDesc();
-
     List<BoardListViewEntity> findTop3ByBoardWriteDatetimeGreaterThanOrderByBoardFavoriteCntDescBoardCommentCntDescBoardViewCntDescBoardWriteDatetimeDesc(String writeDatetime);
-
     List<BoardListViewEntity> findByBoardTitleContainsOrBoardContentContainsOrderByBoardWriteDatetimeDesc(String title, String content);
+    List<BoardListViewEntity> findByBoardUserEmailOrderByBoardWriteDatetimeDesc(String writerEmail);
 }

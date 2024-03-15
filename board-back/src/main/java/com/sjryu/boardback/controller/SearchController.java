@@ -10,6 +10,7 @@ import com.sjryu.boardback.dto.reponse.search.GetPopularListResponseDto;
 import com.sjryu.boardback.dto.reponse.search.GetRelationListResponseDto;
 import com.sjryu.boardback.service.SearchService;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
 @RestController
