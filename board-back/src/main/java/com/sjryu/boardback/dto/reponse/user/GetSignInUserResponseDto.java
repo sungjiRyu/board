@@ -9,7 +9,6 @@ import com.sjryu.boardback.dto.reponse.ResponseDto;
 import com.sjryu.boardback.entity.UserEntity;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class GetSignInUserResponseDto extends ResponseDto {

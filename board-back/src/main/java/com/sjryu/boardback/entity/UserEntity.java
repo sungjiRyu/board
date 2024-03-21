@@ -36,5 +36,13 @@ public class UserEntity {
         this.userAddressDetail = dto.getAddressDetail();
         this.agreedPersonal = dto.getAgreedPersonal();
     }
+
+    public void setNickname(String nickname) {
+        this.userNickname = nickname;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.userProfileImg = profileImage;
+    }
     
 }
