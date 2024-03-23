@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
 import defaultProfileImage from 'assets/image/default-profile-image.png';
 import { useParams } from 'react-router-dom';
@@ -24,12 +24,39 @@ export default function User() {
     // state:  프로필 이미지 상태  //
     const [profileImage, setProfileImage] = useState<string | null>(null);
 
+    //  event handler:  프로필 박스 클릭 이벤트 처리  //
+    const onProfileBoxClickHandler = () => {
+      if (!isMyPage) return;
+      if (!imageInputRef.current) return;
+      imageInputRef.current.click();
+    }
+    //  event handler:  프로필 이미지 변경 이벤트 처리  //
+    const onProfileImageChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.files || !event.target.files.length) return;
+
+      const file = event.target.files[0];
+      const data = new FormData();
+      data.append('file',file);
+    }
+    //  event handler:  닉네임 수정 버튼 클릭 이벤트 처리  //
+    const onNicknameEditButtonClickHandler = () => {
+      setChangeNickname(nickname);
+      setNicknameChange(!isNicknameChange);
+    }
+    //  event handler:  닉네임 변경 이벤트 처리  //
+    const onNicknameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      setChangeNickname(value);
+      // setNickname(value);
+    }
+    
+
     // effect: email path varible 변경시 실행 할 함수
     useEffect(() => {
 
       if(!userEmail) return;
       setNickname('닉네임');
-      setProfileImage('https://img.khan.co.kr/news/2023/01/02/news-p.v1.20230102.1f95577a65fc42a79ae7f990b39e7c21_P1.webp')
+      setProfileImage('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/20210908%E2%80%94Han_Seung-yeon_%ED%95%9C%EC%8A%B9%EC%97%B0%2C_photoshoot%2C_Marie_Claire_Korea_%2805m31s%29.jpg/250px-20210908%E2%80%94Han_Seung-yeon_%ED%95%9C%EC%8A%B9%EC%97%B0%2C_photoshoot%2C_Marie_Claire_Korea_%2805m31s%29.jpg')
     }, [userEmail]);
   
     // render: 유저 화면 상단 컴포넌트 렌더링//
@@ -37,16 +64,14 @@ export default function User() {
       <div id='user-top-wrapper'>
         <div className='user-top-container'>
           {isMyPage ?
-          <div className='user-top-my-profile-image-box'>
+          <div className='user-top-my-profile-image-box' onClick={onProfileBoxClickHandler}>
             {profileImage !== null ?
             <div className='user-top-profile-image' style={{backgroundImage : `url(${profileImage})`}}></div> :
-            <div className='user-top-my-profile-image-nothing-box'>
               <div className='icon-box-large'>
-                <div className='image-box-white-icon'></div>
+                <div className='icon image-box-white-icon'></div>
               </div>
-            </div>
             }
-            <input ref={imageInputRef} type='file' accept ='image/*' style={{display:'none'}}/>
+            <input ref={imageInputRef} type='file' accept ='image/*' style={{display:'none'}} onChange={onProfileImageChangeHandler}/>
           </div> :
           <div className='user-top-profile-image-box'>
             <div className='user-top-profile-image' style={{backgroundImage : `url(${profileImage ? profileImage :  defaultProfileImage})`}}></div>
@@ -57,12 +82,11 @@ export default function User() {
               {isMyPage ?
               <>
               {isNicknameChange ?
-              <input className='user-top-info-nickname-input' type='text' size={nickname.length + 1} value={changeNickname} />  :
-              <div></div>
-              }
+              <input className='user-top-info-nickname-input' type='text' size={changeNickname.length} value={changeNickname} onChange={onNicknameChangeHandler}/>  :
               <div className='user-top-info-nickname'>{nickname}</div>
+              }
               <div className='icon-button'>
-                <div className='icon edit-icon'></div>
+                <div className='icon edit-icon' onClick={onNicknameEditButtonClickHandler}></div>
               </div>
               </> :
               <div className='user-top-info-nickname'>{nickname}</div>
