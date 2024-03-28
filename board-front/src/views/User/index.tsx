@@ -15,7 +15,7 @@ export default function User() {
   //  state:  로그인 유저 상태  //
   const { loginUser } = useLoginUserStore();
   //  state:  마이페이지 여부 상태  //
-  const [isMyPage, setMyPage] = useState<boolean>(true);
+  const [isMyPage, setMyPage] = useState<boolean>(false);
 
   //  function:  네비게이트 함수  //
   const navigate = useNavigate();
@@ -142,26 +142,25 @@ export default function User() {
               {userBoardList.map(boardListItem => <BoardItem boardListItem={boardListItem}/>)}
             </div>
             }
-          <div/>
-          <div className='user-bottom-side-box'>
-            <div className='user-bottom-side-card' onClick={onSideCardClickHandler}>
-              <div className='user-bottom-side-container'>
-                {isMyPage ?
-                <>
-                <div className='icon-box'>
-                  <div className='icon edit-icon'></div>
+            <div className='user-bottom-side-box'>
+              <div className='user-bottom-side-card' onClick={onSideCardClickHandler}>
+                <div className='user-bottom-side-container'>
+                  {isMyPage ?
+                  <>
+                  <div className='icon-box'>
+                    <div className='icon edit-icon'></div>
+                  </div>
+                  <div className='user-bottom-side-text'>{'글쓰기'}</div>
+                  </> : 
+                  <>
+                  <div className='user-bottom-side-text'>{'내 게시물로 가기'}</div>
+                  <div className='icon-box'>
+                    <div className='icon arrow-right-icon'></div>
+                  </div>
+                  </>}
                 </div>
-                <div className='user-bottom-side-text'>{'글쓰기'}</div>
-                </> : 
-                <>
-                <div className='user-bottom-side-text'>{'내 게시물로 가기'}</div>
-                <div className='icon-box'>
-                  <div className='icon arrow-right-icon'></div>
-                </div>
-                </>}
               </div>
             </div>
-          </div>
           </div>
           <div className='user-bottom-pagination-box'>{'pagination'}</div>
         </div>

@@ -3,17 +3,18 @@ import { SignInRequestDto, SignUpRequestDto } from "./request/auth";
 import { SignInResponseDto, SignUpResponseDto } from "./response/auth";
 import { ResponseDto } from "./response";
 import { access } from "fs";
-import { GetSignInUserResponseDto } from "./response/user";
+import { GetSignInUserResponseDto, GetUserResponseDto, PatchNicknameResponseDto } from "./response/user";
 import { PatchBoardRequestDto, PostBoardRequestDto, PostCommentRequestDto } from "./request/board";
 import { request } from "http";
 import { PostBoardResponseDto, GetBoardResponseDto, IncreaseViewCountResponseDto,
         GetFavoriteResponseDto, GetCommentListResponseDto, PutFavoriteResponseDto,
-        PostCommentResponseDto, DeleteBoardResponseDto, GetLatestBoardListResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponseDto } from "./response/board";
+        PostCommentResponseDto, DeleteBoardResponseDto, GetLatestBoardListResponseDto, GetTop3BoardListResponseDto, GetSearchBoardListResponseDto, GetUserBoardListResponseDto } from "./response/board";
 import { Board } from "types/enum/interface";
 import { Cookies } from "react-cookie";
 import { error } from "console";
 import PatchBoardResponseDto from "./response/board/patch-board.response.dto";
 import { GetPopularListResponseDto, GetRelationListResponseDto } from "./response/search";
+import { PatchNicknameRequestDto, PatchProfileImageRequestDto } from "./request/user";
 
 
 
@@ -73,6 +74,7 @@ const DELETE_BOARD_URL = (boardNumber: number | string) => `${API_DOMAIN}/board/
 const GET_LATEST_BOARD_LIST_URL = () => `${API_DOMAIN}/board/latest-list`
 const GET_TOP_3_BOARD_LIST_URL = () =>  `${API_DOMAIN}/board/top-3`
 const GET_SEARCH_BOARD_LIST_URL = (searchWord: string, preSearchWord: string | null) => `${API_DOMAIN}/board/search-list/${searchWord}${preSearchWord ? '/'+ preSearchWord : ''}`;
+const GET_USER_BOARD_LIST_URL = (email: string) => `${API_DOMAIN}/board/user-board-list/${email}`;
 
 
 //  게시물 상세보기
@@ -163,6 +165,21 @@ export const getSearchBoardListRequest = async (searchWord: string, preSearchWor
         const responseBody: ResponseDto = error.response.data;
         return responseBody;
     });
+    return result;
+}
+
+//  특정 유저의 게시물 목록 불러오기
+export const getUserBoardListRequest = async (email: string) => {
+    const result = await axios.get(GET_USER_BOARD_LIST_URL(email))
+    .then(response => {
+        const responseBody: GetUserBoardListResponseDto = response.data;
+        return responseBody;
+    })
+    .catch(error => {
+        if(!error.response) return null;
+        const responseBody: ResponseDto = error.response.data;
+        return responseBody;
+    })
     return result;
 }
 
@@ -291,10 +308,12 @@ export const DeleteBoardRequest = async (boardNumber: number | string, accessTok
      return result;
 }
 
-
-//  마이페이지
+const GET_USER_URL = (email: string) => `${API_DOMAIN}/user/${email}`;
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
+const PATCH_NICKNAME_URL = () => `${API_DOMAIN}/user/nickname`;
+const PATCH_PROFILE_IMAGE_URL = () => `${API_DOMAIN}/user/profile-image`;
 
+//  로그인한 유저 정보를 저장
 export const getSignInUserRequest = async (accessToken: string) => {
     const result = await axios.get(GET_SIGN_IN_USER_URL(), authorization(accessToken))
         .then(response => {
@@ -308,6 +327,53 @@ export const getSignInUserRequest = async (accessToken: string) => {
         });
     return result;
 }
+
+//  마이페이지
+export const getUserRequest = async (email:string) => {
+    const result = await axios.get(GET_USER_URL(email))
+        .then(response => {
+            const responseBody: GetUserResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if(!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        });
+    return result;
+};
+
+//  닉네임 수정
+export const patchNicknameRequest = async (requestBody: PatchNicknameRequestDto, accessToken: string) => {
+    const result = await axios.patch(PATCH_NICKNAME_URL(), requestBody, authorization(accessToken))
+        .then(response => {
+            const responseBody: PatchNicknameResponseDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if(!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        });
+    return result;
+};
+
+//  프로필 이미지 수정patchProfileImageRequest
+export const patchProfileImageRequest = async (requestBody: PatchProfileImageRequestDto, accessToken: string) => {
+    const result = await axios.patch(PATCH_PROFILE_IMAGE_URL(), requestBody, authorization(accessToken))
+        .then(response => {
+            const responseBody: PatchProfileImageRequestDto = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if(!error.response) return null;
+            const responseBody: ResponseDto = error.response.data;
+            return responseBody;
+        });
+    return result;
+};
+
+
 
 
 //  파일 업로드
@@ -325,4 +391,4 @@ export const fileUploadRequest = async(data: FormData) => {
             return null;
         })
     return result;
-}
+};
